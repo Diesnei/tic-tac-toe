@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+    width: 100vw;
+    height: 100vh;
+    background-color: lightblue;
+    box-sizing: border-box;
+}
+
+.tic-tac-toe {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tic-tac-toe-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tic-tac-toe-cell {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    padding: 32px;
+    justify-content: center;
+    align-items: center;
+    background-color: lightcoral;
+    border-radius: 16px;
+}
+
+.tic-tac-toe-cell i {
+    font-size: 32px;
+}
+
+.tic-tac-toe-row:has(.tic-tac-toe-cell.highlight) > .tic-tac-toe-cell:not(.highlight) {
+    opacity: 0.6;
+}
+
+.tic-tac-toe-cell.highlight {
+    background-color: lightcyan;
+}
+
+.tic-tac-toe-cell:not(.filled) {
+    cursor: pointer;
+}
