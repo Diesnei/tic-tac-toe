@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+</head>
+<body>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 32px;
+            width: 100vw;
+            height: 100vh;
+            background-color: lightblue;
+            box-sizing: border-box;
+        }
+
+        .tic-tac-toe {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tic-tac-toe-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tic-tac-toe-cell {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            padding: 32px;
+            justify-content: center;
+            align-items: center;
+            background-color: lightcoral;
+            border-radius: 16px;
+        }
+
+        .tic-tac-toe-cell i {
+            font-size: 32px;
+        }
+
+        .tic-tac-toe-row:has(.tic-tac-toe-cell.highlight) > .tic-tac-toe-cell:not(.highlight) {
+            opacity: 0.6;
+        }
+
+        .tic-tac-toe-cell.highlight {
+            background-color: lightcyan;
+        }
+
+        .tic-tac-toe-cell:not(.filled) {
+            cursor: pointer;
+        }
+    </style>
+
+    <div class='tic-tac-toe'>
+        <div class='tic-tac-toe-row'>
+            <div class='tic-tac-toe-cell' number="1" value="">
+            </div>
+            <div class='tic-tac-toe-cell' number="2" value="">
+            </div>
+            <div class='tic-tac-toe-cell' number="3" value="">
+            </div>
+        </div>
+        <div class='tic-tac-toe-row'>
+            <div class='tic-tac-toe-cell' number="4" value="">
+            </div>
+            <div class='tic-tac-toe-cell' number="5" value="">
+            </div>
+            <div class='tic-tac-toe-cell' number="6" value="">
+            </div>
+        </div>
+        <div class='tic-tac-toe-row'>
+            <div class='tic-tac-toe-cell' number="7" value="">
+            </div>
+            <div class='tic-tac-toe-cell' number="8" value="">
+            </div>
+            <div class='tic-tac-toe-cell' number="9" value="">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cells = Array.from(document.getElementsByClassName('tic-tac-toe-cell'));
+
+        const availableSequences = [
+            '1-2-3',
+            '4-5-6',
+            '7-8-9',
+            '1-4-7',
+            '2-5-8',
+            '3-6-9',
+            '1-5-9',
+            '3-5-7'
+        ];
+
+        const playerOne = 'X';
+
+        const playerTwo = 'O';
+
+        let currentPlayer = playerOne;
+        let nextPlayer = playerOne;
+
+        const playersCells = {
+            [playerOne]: [],
+            [playerTwo]: []
+        }
+
+        let winner = null;
+
+        cells.forEach(cell => cell.addEventListener('click', e => {
+            if (winner === null) {
+                const cellNumber = parseInt(cell.getAttribute('number'));
+
+                if (cell.getAttribute('value').length === 0) {
+                    cell.setAttribute('value', nextPlayer);
+
+                    currentPlayer = playerOne;
+                    let nextPlayerValue = playerOne;
+                    let cellIcon = "<i class='fa-regular fa-circle'></i>";
+                    if (nextPlayer === playerOne) {
+                        currentPlayer = playerTwo;
+                        nextPlayerValue = playerTwo;
+                        cellIcon = "<i class='fa-solid fa-xmark'></i>";
+                    }
+
+                    playersCells[currentPlayer].push(cellNumber);
+                    nextPlayer = nextPlayerValue;
+                    cell.innerHTML = cellIcon;
+
+                    const matchedSequences = availableSequences.filter(sequence => sequence.includes(cellNumber));
+                    matchedSequences.forEach(matchedSequence => {
+                        let matchNumbers = 0;
+
+                        const matchedSequenceNumbers = matchedSequence.split('-');
+                        matchedSequenceNumbers.forEach(matchedSequenceNumber => {
+                            if (playersCells[currentPlayer].includes(parseInt(matchedSequenceNumber))) {
+                                matchNumbers ++;
+                            }
+                        });
+                        
+                        if (matchNumbers === 3) {
+                            matchedSequenceNumbers.forEach(matchedSequenceNumber => {
+                                document.querySelector(`.tic-tac-toe-cell[number="${matchedSequenceNumber}"]`).classList.add('highlight');
+                            });
+                            winner = currentPlayer;
+                            return;
+                        }
+                    });
+                }
+            }
+        }));
+    </script>
+</body>
+</html>
